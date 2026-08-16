@@ -1,8 +1,8 @@
 services:
-  data-manager:
+  data-nest:
     build: .
-    image: data-manager:latest
-    container_name: data-manager
+    image: data-nest:latest
+    container_name: data-nest
     ports:
       - "3000:3000"
     volumes:

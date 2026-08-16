@@ -1,6 +1,10 @@
-# 数据管理 APP
+# 小剧数巢 (DataNest)
 
-基于 Node.js 的轻量级数据管理服务。单一用户角色、无开放注册，支持数据增删改查、匿名访问控制，以及面向外部服务的 API Token。
+个人跨应用数据管理平台。基于 Node.js，单一用户角色、无开放注册，支持数据增删改查、匿名访问控制，以及面向外部服务的 API Token。
+
+- 中文名：小剧数巢
+- 英文名：DataNest
+- 建议子域名：`nest.你的域名`
 
 ## 功能
 
@@ -120,7 +124,7 @@ docker compose up -d
 ./scripts/docker-publish.sh v1.0.0
 
 # 构建并推送到仓库（先 docker login）
-IMAGE=ghcr.io/yourname/data-manager PUSH=true ./scripts/docker-publish.sh v1.0.0
+IMAGE=ghcr.io/yourname/data-nest PUSH=true ./scripts/docker-publish.sh v1.0.0
 ```
 
 镜像内数据目录为 `/app/data`（建议挂载卷持久化），服务端口 `3000`。

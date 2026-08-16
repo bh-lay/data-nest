@@ -1,7 +1,7 @@
 {
-  "name": "data-manager",
+  "name": "data-nest",
   "version": "1.0.0",
-  "description": "Self-hosted data management app: single user role, CRUD data with anonymous access, API tokens",
+  "description": "小剧数巢 (DataNest) — 个人跨应用数据管理平台",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

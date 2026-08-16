@@ -1,4 +1,4 @@
-/* 数据管理 — 前端逻辑 */
+/* 小剧数巢 (DataNest) — 前端逻辑 */
 (function () {
   const TOKEN_KEY = 'dm_token';
   const USER_KEY = 'dm_user';

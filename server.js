@@ -28,6 +28,6 @@ app.use((req, res, next) => {
 });
 
 app.listen(config.PORT, () => {
-  console.log(`Data Manager running at http://localhost:${config.PORT}`);
+  console.log(`小剧数巢 (DataNest) running at http://localhost:${config.PORT}`);
   console.log(`SQLite database: ${config.DB_PATH}`);
 });
