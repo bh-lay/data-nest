@@ -80,6 +80,40 @@
           </thead>
           <tbody id="tokens-body"></tbody>
         </table>
+
+        <div class="docs card">
+          <h3>接口文档</h3>
+          <p class="muted">外部服务用 Token 读写数据。鉴权方式二选一：请求头 <code>X-API-Token: &lt;TOKEN&gt;</code>，或 <code>Authorization: Bearer &lt;TOKEN&gt;</code>。</p>
+          <table class="table">
+            <thead>
+              <tr><th>方法</th><th>路径</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>GET</code></td><td><code>/api/records</code></td><td>读取全部数据（Token 可见所有记录）</td></tr>
+              <tr><td><code>GET</code></td><td><code>/api/records/:id</code></td><td>读取单条数据，<code>:id</code> 为记录 ID</td></tr>
+              <tr><td><code>POST</code></td><td><code>/api/records</code></td><td>创建数据</td></tr>
+              <tr><td><code>PUT</code></td><td><code>/api/records/:id</code></td><td>更新数据（可只传要改的字段）</td></tr>
+              <tr><td><code>DELETE</code></td><td><code>/api/records/:id</code></td><td>删除数据</td></tr>
+            </tbody>
+          </table>
+          <h4>请求示例</h4>
+          <pre class="view-pre"># 创建数据（data 为任意 JSON 值）
+curl -X POST http://localhost:3000/api/records \
+  -H "X-API-Token: &lt;TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"示例","data":{"key":"value"},"anonymous_access":false}'
+
+# 更新数据（:id 替换为记录 ID）
+curl -X PUT http://localhost:3000/api/records/&lt;ID&gt; \
+  -H "Authorization: Bearer &lt;TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"data":{"key":"new value"}}'
+
+# 删除数据
+curl -X DELETE http://localhost:3000/api/records/&lt;ID&gt; \
+  -H "X-API-Token: &lt;TOKEN&gt;"</pre>
+          <p class="muted">创建记录必填 <code>data</code>；<code>name</code> 与 <code>anonymous_access</code> 可选。<code>anonymous_access=true</code> 时该记录无需登录即可读取。记录 ID 可在数据列表中查看并复制。</p>
+        </div>
       </section>
     </main>
   </div>
@@ -108,6 +142,7 @@
   <div id="view-modal" class="modal hidden">
     <div class="modal-card card">
       <h3 id="view-modal-title">记录详情</h3>
+      <div id="view-meta" class="view-meta"></div>
       <pre id="view-data" class="view-pre"></pre>
       <div class="modal-actions">
         <button id="btn-view-close" class="btn">关闭</button>

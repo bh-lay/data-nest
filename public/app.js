@@ -70,6 +70,15 @@
     }[c]));
   }
 
+  async function copyText(text, msg) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(msg);
+    } catch {
+      toast('复制失败，请手动复制');
+    }
+  }
+
   /* ---------- 认证 ---------- */
 
   function showLogin() {
@@ -143,17 +152,21 @@
         const card = document.createElement('div');
         card.className = 'record-card card';
         card.innerHTML = `
-          <div>
-            <span class="record-name">${escapeHtml(rec.name || `记录 #${rec.id}`)}</span>
-            ${rec.anonymous_access ? '<span class="badge">匿名可读</span>' : ''}
+          <div class="record-head">
+            <div>
+              <span class="record-name">${escapeHtml(rec.name || `记录 #${rec.id}`)}</span>
+              ${rec.anonymous_access ? '<span class="badge">匿名可读</span>' : ''}
+            </div>
+            <button class="btn btn-mini" data-act="copyid" title="复制记录 ID">ID: ${rec.id}</button>
           </div>
-          <div class="record-meta">#${rec.id} · 更新于 ${escapeHtml(rec.updated_at)}</div>
+          <div class="record-meta">更新于 ${escapeHtml(rec.updated_at)}</div>
           <pre>${escapeHtml(recordPreview(rec))}</pre>
           <div class="record-actions">
             <button class="btn" data-act="view">查看</button>
             <button class="btn" data-act="edit">编辑</button>
             <button class="btn danger" data-act="delete">删除</button>
           </div>`;
+        card.querySelector('[data-act="copyid"]').addEventListener('click', () => copyText(String(rec.id), 'ID 已复制'));
         card.querySelector('[data-act="view"]').addEventListener('click', () => openView(rec));
         card.querySelector('[data-act="edit"]').addEventListener('click', () => openEditor(rec));
         card.querySelector('[data-act="delete"]').addEventListener('click', () => deleteRecord(rec));
@@ -235,6 +248,11 @@
   function openView(rec) {
     state.viewRecordId = rec.id;
     $('#view-modal-title').textContent = rec.name ? `${rec.name} (#${rec.id})` : `记录 #${rec.id}`;
+    $('#view-meta').innerHTML = `
+      <span>记录 ID：<button class="btn btn-mini" data-act="copyid">${rec.id}</button></span>
+      <span class="endpoints">GET /api/records/${rec.id} · PUT /api/records/${rec.id} · DELETE /api/records/${rec.id}</span>`;
+    $('#view-meta').querySelector('[data-act="copyid"]')
+      .addEventListener('click', () => copyText(String(rec.id), 'ID 已复制'));
     $('#view-data').textContent = JSON.stringify(rec.data, null, 2);
     show($('#view-modal'));
   }

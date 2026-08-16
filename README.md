@@ -82,7 +82,7 @@ ADMIN_USERNAME=root ADMIN_PASSWORD=change-me node server.js
 - `PUT /api/records/:id` — 更新（部分字段即可）（需登录或 Token）
 - `DELETE /api/records/:id` — 删除（需登录或 Token）
 
-`data` 必填且为任意 JSON 值，其余字段不做内容校验。
+`data` 必填且为任意 JSON 值，其余字段不做内容校验。路径中的 `:id` 为记录 ID，可在 Web 界面数据列表中查看并复制。
 
 ### API Token（需登录）
 
@@ -102,6 +102,28 @@ curl -H "Authorization: Bearer dm_xxxx" http://localhost:3000/api/records
 ```
 
 Token 拥有数据的完整读写权限，但不能管理用户或创建/撤销 Token。
+
+## Docker 部署
+
+### 使用 docker compose
+
+```bash
+docker compose up -d
+```
+
+数据持久化到宿主机 `./data` 目录。首次启动（空数据库）前可在 `docker-compose.yml` 中设置管理员账号与 `JWT_SECRET`。
+
+### 构建并发布镜像
+
+```bash
+# 仅构建本地镜像
+./scripts/docker-publish.sh v1.0.0
+
+# 构建并推送到仓库（先 docker login）
+IMAGE=ghcr.io/yourname/data-manager PUSH=true ./scripts/docker-publish.sh v1.0.0
+```
+
+镜像内数据目录为 `/app/data`（建议挂载卷持久化），服务端口 `3000`。
 
 ## 项目结构
 

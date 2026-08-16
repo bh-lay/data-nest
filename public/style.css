@@ -135,6 +135,32 @@ main { max-width: 980px; margin: 24px auto; padding: 0 20px; }
   color: var(--ok);
 }
 
+.record-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.btn-mini { padding: 2px 8px; font-size: 12px; font-family: var(--mono); }
+
+code {
+  font-family: var(--mono);
+  background: #f0f2f5;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.view-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.view-meta .endpoints { font-family: var(--mono); color: var(--muted); font-size: 12px; }
+
+.docs { margin-top: 20px; }
+.docs h3 { margin-bottom: 4px; }
+.docs h4 { margin: 16px 0 8px; }
+.docs .table { margin: 12px 0; }
+
 /* 表格 */
 .table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 .table th, .table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); }
