@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据管理</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 登录 -->
+  <div id="login-view" class="login-wrap hidden">
+    <form id="login-form" class="card login-card">
+      <h1>数据管理</h1>
+      <p class="muted">请登录以继续</p>
+      <label>用户名<input id="login-username" type="text" autocomplete="username" required /></label>
+      <label>密码<input id="login-password" type="password" autocomplete="current-password" required /></label>
+      <div id="login-error" class="error hidden"></div>
+      <button type="submit" class="btn primary">登录</button>
+    </form>
+  </div>
+
+  <!-- 主界面 -->
+  <div id="app-view" class="hidden">
+    <header class="topbar">
+      <span class="brand">数据管理</span>
+      <nav class="tabs">
+        <button class="tab active" data-tab="records">数据记录</button>
+        <button class="tab" data-tab="users">用户管理</button>
+        <button class="tab" data-tab="tokens">API Tokens</button>
+      </nav>
+      <div class="topbar-right">
+        <span id="current-user" class="muted"></span>
+        <button id="btn-change-password" class="btn">修改密码</button>
+        <button id="btn-logout" class="btn">退出</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- 数据记录 -->
+      <section id="panel-records" class="panel">
+        <div class="panel-head">
+          <h2>数据记录</h2>
+          <button id="btn-new-record" class="btn primary">新建记录</button>
+        </div>
+        <div id="records-list" class="records-list"></div>
+        <div id="records-empty" class="empty hidden">暂无记录</div>
+      </section>
+
+      <!-- 用户管理 -->
+      <section id="panel-users" class="panel hidden">
+        <div class="panel-head">
+          <h2>用户管理</h2>
+        </div>
+        <form id="user-form" class="inline-form card">
+          <input id="new-username" type="text" placeholder="用户名" required />
+          <input id="new-password" type="password" placeholder="密码（至少 6 位）" required />
+          <button type="submit" class="btn primary">创建用户</button>
+        </form>
+        <table class="table">
+          <thead>
+            <tr><th>ID</th><th>用户名</th><th>创建时间</th><th></th></tr>
+          </thead>
+          <tbody id="users-body"></tbody>
+        </table>
+      </section>
+
+      <!-- API Tokens -->
+      <section id="panel-tokens" class="panel hidden">
+        <div class="panel-head">
+          <h2>API Tokens</h2>
+        </div>
+        <p class="muted">Token 供外部服务读写数据使用。创建后仅显示一次，请立即保存。</p>
+        <form id="token-form" class="inline-form card">
+          <input id="new-token-name" type="text" placeholder="Token 名称" required />
+          <button type="submit" class="btn primary">创建 Token</button>
+        </form>
+        <table class="table">
+          <thead>
+            <tr><th>ID</th><th>名称</th><th>前缀</th><th>创建时间</th><th>最近使用</th><th></th></tr>
+          </thead>
+          <tbody id="tokens-body"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- 记录编辑弹窗 -->
+  <div id="record-modal" class="modal hidden">
+    <div class="modal-card card">
+      <h3 id="record-modal-title">新建记录</h3>
+      <label>名称（可选）<input id="record-name" type="text" placeholder="用于列表展示" /></label>
+      <label>数据（JSON，任意类型，不做校验）
+        <textarea id="record-data" rows="10" spellcheck="false" placeholder='{}'></textarea>
+      </label>
+      <label class="check">
+        <input id="record-anon" type="checkbox" />
+        允许匿名访问（无需登录即可读取）
+      </label>
+      <div id="record-error" class="error hidden"></div>
+      <div class="modal-actions">
+        <button id="btn-record-cancel" class="btn">取消</button>
+        <button id="btn-record-save" class="btn primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 记录查看弹窗 -->
+  <div id="view-modal" class="modal hidden">
+    <div class="modal-card card">
+      <h3 id="view-modal-title">记录详情</h3>
+      <pre id="view-data" class="view-pre"></pre>
+      <div class="modal-actions">
+        <button id="btn-view-close" class="btn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 修改密码弹窗 -->
+  <div id="password-modal" class="modal hidden">
+    <div class="modal-card card">
+      <h3>修改密码</h3>
+      <label>当前密码<input id="pw-current" type="password" autocomplete="current-password" /></label>
+      <label>新密码<input id="pw-new" type="password" autocomplete="new-password" /></label>
+      <div id="pw-error" class="error hidden"></div>
+      <div class="modal-actions">
+        <button id="btn-pw-cancel" class="btn">取消</button>
+        <button id="btn-pw-save" class="btn primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token 展示弹窗 -->
+  <div id="token-modal" class="modal hidden">
+    <div class="modal-card card">
+      <h3>Token 已创建</h3>
+      <p class="muted">请立即复制保存，关闭后将无法再次查看。</p>
+      <pre id="token-secret" class="view-pre token-secret"></pre>
+      <div class="modal-actions">
+        <button id="btn-token-copy" class="btn primary">复制</button>
+        <button id="btn-token-close" class="btn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>
