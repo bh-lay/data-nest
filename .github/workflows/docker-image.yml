@@ -14,5 +14,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag data-nest:$(date +%s)
+      run: docker build . --file Dockerfile --tag bhlay/data-nest:latest
+
+    - name: Log in to Docker Hub
+      if: github.event_name == 'push'
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      run: echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+    - name: Push to Docker Hub
+      if: github.event_name == 'push'
+      run: docker push bhlay/data-nest:latest
